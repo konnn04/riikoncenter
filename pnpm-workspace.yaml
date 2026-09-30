@@ -7,9 +7,9 @@ allowBuilds:
   '@nestjs/core': true
   '@parcel/watcher': true
   '@prisma/engines': true
-  '@swc/core': set this to true or false
+  '@swc/core': true
   bcrypt: true
-  canvas: true
+  canvas: false
   esbuild: true
   prisma: true
   spawn-sync: true
