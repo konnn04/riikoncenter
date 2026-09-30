@@ -3,6 +3,10 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 
 export default defineConfig({
+  base: './',
+  esbuild: {
+    jsx: 'automatic',
+  },
   plugins: [react()],
   server: {
     port: 3304,

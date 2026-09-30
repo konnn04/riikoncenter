@@ -1,6 +1,7 @@
 FROM node:22-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
+ENV NEXT_TELEMETRY_DISABLED=1
 RUN corepack enable
 
 WORKDIR /app
@@ -12,6 +13,7 @@ RUN pnpm install --frozen-lockfile
 
 ARG NEXT_PUBLIC_SOCKET_URL
 ENV NEXT_PUBLIC_SOCKET_URL=$NEXT_PUBLIC_SOCKET_URL
+ENV NODE_ENV=production
 
 RUN pnpm run build
 
