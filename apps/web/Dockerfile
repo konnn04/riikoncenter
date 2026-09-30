@@ -9,6 +9,7 @@ ENV NODE_ENV=development
 WORKDIR /app
 COPY . .
 RUN pnpm install --frozen-lockfile
+RUN pnpm --filter simple-customize-markdown-converter run build || true
 
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
