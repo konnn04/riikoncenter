@@ -17,4 +17,4 @@ FROM base AS runner
 WORKDIR /app
 COPY --from=builder /app ./
 EXPOSE 3000
-CMD ["pnpm", "--filter", "web", "start"]
+CMD ["pnpm", "--filter", "web", "exec", "next", "start", "-p", "3000"]
