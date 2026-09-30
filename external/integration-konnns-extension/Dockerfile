@@ -1,8 +1,9 @@
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
+ENV NODE_ENV=development
 WORKDIR /app
 COPY . .
 RUN pnpm install --frozen-lockfile

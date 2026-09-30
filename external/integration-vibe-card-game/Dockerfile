@@ -1,4 +1,4 @@
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
@@ -7,6 +7,7 @@ WORKDIR /app
 COPY . .
 
 WORKDIR /app/external/integration-vibe-card-game/vibe-card-game
+ENV NODE_ENV=development
 RUN pnpm install --frozen-lockfile
 
 ARG NEXT_PUBLIC_SOCKET_URL
