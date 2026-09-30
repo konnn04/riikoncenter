@@ -14,12 +14,52 @@ services:
       - konnns-tool
       - vibe-card-game
 
+  redis:
+    image: redis:7-alpine
+    container_name: riikoncenter-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: riikoncenter-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-riikoncenter}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-riikoncenter}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
   api:
     build:
       context: .
       dockerfile: apps/api/Dockerfile
     env_file:
       - .env
+    environment:
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-riikoncenter}?schema=public}
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
 
   web:
     build:
@@ -62,3 +102,6 @@ services:
       - INTERNAL_CLIENT_URL=${VIBE_INTERNAL_CLIENT_URL}
       - NEXT_PUBLIC_SOCKET_URL=${VIBE_PUBLIC_SOCKET_URL}
 
+volumes:
+  redis_data:
+  postgres_data:
