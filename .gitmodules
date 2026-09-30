@@ -5,3 +5,9 @@
 	path = external/integration-vibe-card-game/vibe-card-game
 	url = https://github.com/Riikon-Team/vibe-card-game
 	ignore = dirty
+[submodule "external/integration-konnns-extension/konnns-extension"]
+	path = external/integration-konnns-extension/konnns-extension
+	url = https://github.com/Riikon-Team/konnns-extension
+[submodule "external/integration-simple-custom-markdown-converter/simple-custom-markdown-converter"]
+	path = external/integration-simple-custom-markdown-converter/simple-custom-markdown-converter
+	url = https://github.com/Riikon-Team/simple-custom-markdown-converter

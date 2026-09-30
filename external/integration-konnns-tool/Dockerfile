@@ -8,6 +8,7 @@ ENV NODE_ENV=development
 WORKDIR /app
 COPY . .
 RUN pnpm install --frozen-lockfile
+ENV NODE_ENV=production
 RUN pnpm --filter konnn-tools run build
 
 FROM base AS runner

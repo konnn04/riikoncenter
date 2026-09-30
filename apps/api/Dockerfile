@@ -9,6 +9,7 @@ WORKDIR /app
 COPY . .
 RUN pnpm install --frozen-lockfile
 RUN pnpm --filter api exec prisma generate
+ENV NODE_ENV=production
 RUN pnpm --filter api run build
 
 FROM base AS runner

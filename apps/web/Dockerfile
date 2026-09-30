@@ -12,6 +12,7 @@ RUN pnpm install --frozen-lockfile
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
+ENV NODE_ENV=production
 RUN pnpm --filter web run build
 
 FROM base AS runner
