@@ -12,7 +12,6 @@ services:
       - api
       - konnns-extension
       - konnns-tool
-      - vibe-card-game
 
   redis:
     image: redis:7-alpine
@@ -99,25 +98,6 @@ services:
       - "3001"
     environment:
       - PORT=${KONNNS_TOOL_PORT}
-
-  vibe-card-game:
-    build:
-      context: .
-      dockerfile: external/integration-vibe-card-game/Dockerfile
-      args:
-        - NEXT_PUBLIC_SOCKET_URL=${VIBE_PUBLIC_SOCKET_URL}
-    env_file:
-      - path: .env
-        required: false
-    expose:
-      - "3310"
-    environment:
-      - PORT=${VIBE_PORT}
-      - SERVER_PORT=${VIBE_SERVER_PORT}
-      - INTERNAL_SERVER_URL=${VIBE_INTERNAL_SERVER_URL}
-      - CLIENT_PORT=${VIBE_CLIENT_PORT}
-      - INTERNAL_CLIENT_URL=${VIBE_INTERNAL_CLIENT_URL}
-      - NEXT_PUBLIC_SOCKET_URL=${VIBE_PUBLIC_SOCKET_URL}
 
 volumes:
   redis_data:
