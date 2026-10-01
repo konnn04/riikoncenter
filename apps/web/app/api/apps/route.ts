@@ -24,7 +24,7 @@ export async function GET() {
   try {
 
     // Fetch repositories from our Backend using GitHub App auth
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:8008';
+    const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8008';
     const reposRes = await fetch(`${apiUrl}/api/v1/github/org-repos/${orgName}`, {
       next: { revalidate: 3600 }, // Cache for 1 hour
     });
@@ -47,7 +47,7 @@ export async function GET() {
 
       try {
         // Fetch manifest via backend
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:8008';
+        const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8008';
         const manifestUrl = `${apiUrl}/api/v1/github/org-repos/${orgName}/${repo.name}/file/riikoncenter-manifest.json`;
         const manifestRes = await fetch(manifestUrl, {
           next: { revalidate: 3600 },
@@ -60,7 +60,7 @@ export async function GET() {
             
             let readme = undefined;
             try {
-              const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:8008';
+              const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8008';
               const readmeRes = await fetch(`${apiUrl}/api/v1/github/org-repos/${orgName}/${repo.name}/readme`, {
                 next: { revalidate: 3600 },
               });
@@ -87,7 +87,7 @@ export async function GET() {
 
       let readme = undefined;
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:8008';
+        const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8008';
         const readmeRes = await fetch(`${apiUrl}/api/v1/github/org-repos/${orgName}/${repo.name}/readme`, {
           next: { revalidate: 3600 },
         });

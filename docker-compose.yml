@@ -75,6 +75,8 @@ services:
     env_file:
       - path: .env
         required: false
+    environment:
+      - API_URL=http://api:3309
     expose:
       - "3000"
     depends_on:
