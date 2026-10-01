@@ -1,10 +1,3 @@
-[submodule "external/integration-konnns-tool/tools"]
-	path = external/integration-konnns-tool/tools
-	url = https://github.com/Riikon-Team/tools
-[submodule "external/integration-vibe-card-game/vibe-card-game"]
-	path = external/integration-vibe-card-game/vibe-card-game
-	url = https://github.com/Riikon-Team/vibe-card-game
-	ignore = dirty
 [submodule "external/integration-konnns-extension/konnns-extension"]
 	path = external/integration-konnns-extension/konnns-extension
 	url = https://github.com/Riikon-Team/konnns-extension

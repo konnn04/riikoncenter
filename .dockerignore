@@ -6,6 +6,5 @@ node_modules
 **/.turbo
 **/*.tsbuildinfo
 .git
-external/integration-vibe-card-game
 .github
 docs

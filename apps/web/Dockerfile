@@ -2,7 +2,7 @@ FROM node:22-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN corepack enable
+RUN corepack enable && corepack prepare pnpm@11.26.0 --activate
 
 FROM base AS builder
 ENV NODE_ENV=development

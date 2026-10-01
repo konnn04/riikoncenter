@@ -2,7 +2,6 @@ packages:
   - "apps/*"
   - "packages/*"
   - "external/*/*"
-  - "!external/integration-vibe-card-game/vibe-card-game/**"
 allowBuilds:
   '@nestjs/core': true
   '@parcel/watcher': true
