@@ -9,17 +9,12 @@ ENV NODE_ENV=development
 WORKDIR /app
 COPY . .
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter simple-customize-markdown-converter run build || true
-
-ARG NEXT_PUBLIC_API_URL
-ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
-
 ENV NODE_ENV=production
-RUN pnpm --filter web run build
+RUN pnpm --filter konnn-tools run build
 
 FROM base AS runner
 ENV NODE_ENV=production
 WORKDIR /app
 COPY --from=builder /app ./
-EXPOSE 3000
-CMD ["pnpm", "--filter", "web", "exec", "next", "start", "-p", "3000"]
+EXPOSE 3001
+CMD ["pnpm", "--filter", "konnn-tools", "exec", "next", "start", "-p", "3001"]

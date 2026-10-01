@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Konnns Extension Wrapper</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      // Demo security feature: Block direct access, only allow via iframe
+      if (window.parent === window) {
+        document.body.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;background:#0f172a;color:#f87171;"><h1>403 FORBIDDEN</h1><p>Direct access to this app is disabled.</p><p>Please access it through the RiikonCenter Dashboard.</p></div>';
+        throw new Error('Direct access forbidden');
+      }
+    </script>
+    <script type="module" src="/main.tsx"></script>
+  </body>
+</html>

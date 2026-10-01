@@ -2,21 +2,70 @@ version: '3.8'
 
 services:
   nginx-gateway:
-    image: nginx:alpine
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    expose:
+      - "80"
     depends_on:
       - web
       - api
+      - konnns-extension
+      - konnns-tool
+      - vibe-card-game
+
+  redis:
+    image: redis:7-alpine
+    container_name: riikoncenter-redis
+    restart: unless-stopped
+    expose:
+      - "6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: riikoncenter-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-riikoncenter}
+    expose:
+      - "5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-riikoncenter}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   api:
     build:
       context: .
       dockerfile: apps/api/Dockerfile
     env_file:
-      - .env
+      - path: .env
+        required: false
+    expose:
+      - "3309"
+    environment:
+      - PORT=3309
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-riikoncenter}?schema=public}
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    command: >
+      sh -c "pnpm --filter api exec prisma db push && pnpm --filter api run start:prod"
 
   web:
     build:
@@ -24,11 +73,52 @@ services:
       dockerfile: apps/web/Dockerfile
       args:
         - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-        - NEXT_PUBLIC_GITHUB_ORG=${NEXT_PUBLIC_GITHUB_ORG}
     env_file:
-      - .env
+      - path: .env
+        required: false
+    expose:
+      - "3000"
     depends_on:
       - api
 
+  konnns-extension:
+    build:
+      context: .
+      dockerfile: external/integration-konnns-extension/Dockerfile
+    expose:
+      - "80"
 
+  konnns-tool:
+    build:
+      context: .
+      dockerfile: external/integration-konnns-tool/Dockerfile
+    env_file:
+      - path: .env
+        required: false
+    expose:
+      - "3001"
+    environment:
+      - PORT=${KONNNS_TOOL_PORT}
 
+  vibe-card-game:
+    build:
+      context: .
+      dockerfile: external/integration-vibe-card-game/Dockerfile
+      args:
+        - NEXT_PUBLIC_SOCKET_URL=${VIBE_PUBLIC_SOCKET_URL}
+    env_file:
+      - path: .env
+        required: false
+    expose:
+      - "3310"
+    environment:
+      - PORT=${VIBE_PORT}
+      - SERVER_PORT=${VIBE_SERVER_PORT}
+      - INTERNAL_SERVER_URL=${VIBE_INTERNAL_SERVER_URL}
+      - CLIENT_PORT=${VIBE_CLIENT_PORT}
+      - INTERNAL_CLIENT_URL=${VIBE_INTERNAL_CLIENT_URL}
+      - NEXT_PUBLIC_SOCKET_URL=${VIBE_PUBLIC_SOCKET_URL}
+
+volumes:
+  redis_data:
+  postgres_data:

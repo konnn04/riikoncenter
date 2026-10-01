@@ -5,7 +5,11 @@ import "./globals.css";
 import { ThemeProvider } from "../components/providers/ThemeProvider";
 import { I18nProvider } from "../components/providers/I18nProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  fallback: ["system-ui", "arial"],
+});
 
 export const metadata: Metadata = {
   title: "RiikonCenter",

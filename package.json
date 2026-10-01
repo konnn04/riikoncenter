@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
+    "build": "turbo run build --filter=!konnn-extension",
+    "dev": "turbo run dev --filter=!konnn-extension",
+    "dev:vibe": "cd external/integration-vibe-card-game/vibe-card-game && pnpm build && concurrently \"pnpm --filter @u-no/server run start:prod\" \"pnpm --filter @u-no/client exec next start -p 3312\" \"pnpm --filter @u-no/gateway run start\"",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "db:generate": "pnpm --filter api run db:generate",
@@ -23,7 +24,6 @@
       "@parcel/watcher": "2.6.0",
       "@prisma/engines": "7.8.0",
       "bcrypt": "6.0.0",
-      "canvas": "3.2.3",
       "esbuild": [
         "0.21.5",
         "0.27.7"
@@ -32,7 +32,11 @@
       "spawn-sync": "1.0.15",
       "tesseract.js": "7.0.0",
       "unrs-resolver": "1.12.2",
-      "@swc/core": "*"
+      "@swc/core": "1.16.2"
     }
+  },
+  "resolutions": {
+    "@types/react": "18.2.79",
+    "@types/react-dom": "18.2.25"
   }
 }
